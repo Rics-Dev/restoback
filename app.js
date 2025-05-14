@@ -1,6 +1,7 @@
 require('dotenv').config(); // Charger les variables d'environnement
 const express = require('express'); // Importer Express
-const pool = require('./config/db'); // Importer la connexion à la base de données
+const pool = require('./config/db.js'); // Importer la connexion à la base de données
+const { initializeDatabase } = require('./config/db-init');
 const errorHandler = require("./controller/errorHandler");
 const { db } = require('./config/firebase-admin'); // Import simplifié
 const ingredientRoutes = require('./routes/ingredient_routes'); // Importer les routes des ingrédients
@@ -65,10 +66,37 @@ app.use('/api', fcmTokenRoute); // Utiliser les routes de gestion des tokens FCM
 
 app.use(errorHandler);
 
-startCronJob();
-//rana nl3bo
+// Start the server with database initialization
+async function startServer() {
+  try {
+    // Initialize database schema
+    const dbInitialized = await initializeDatabase();
+    if (!dbInitialized) {
+      console.error('❌ Failed to initialize database schema. Exiting...');
+      process.exit(1);
+    }
+    
+    // Start cron job for notifications
+    startCronJob();
+    
+    // Start the server
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-    console.log(`Serveur en écoute sur le port ${PORT}`);
-});
+// Start the server
+startServer();
+//
+// startCronJob();
+// //rana nl3bo
+//
+// const PORT = process.env.PORT;
+// app.listen(PORT, () => {
+//     console.log(`Serveur en écoute sur le port ${PORT}`);
+// });

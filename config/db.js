@@ -1,5 +1,6 @@
+// config/db.js
 const { Pool } = require('pg');
-require('dotenv').config();
+require('dotenv').config(); // Charger les variables d'environnement
 const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
