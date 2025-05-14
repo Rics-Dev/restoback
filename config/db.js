@@ -6,9 +6,9 @@ const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
-  ssl: {
-    rejectUnauthorized: false // Désactiver la vérification SSL
-  }
+  // ssl: {
+  //   rejectUnauthorized: false // Désactiver la vérification SSL
+  // }
 });
 const testConnection = async () => {
   try {
