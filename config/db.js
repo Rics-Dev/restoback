@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config(); // Charger les variables d'environnement
+require('dotenv').config();
 const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -21,7 +21,6 @@ const testConnection = async () => {
   }
 };
 
-// Tester la connexion au démarrage
 testConnection();
 
 module.exports = pool;
